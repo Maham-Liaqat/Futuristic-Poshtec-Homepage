@@ -91,7 +91,7 @@ html,body{margin:0;height:100%;background:var(--space);overflow:hidden;color:#df
   padding-left:0.5em; /* compensate trailing letter-spacing for visual center */
 }
 .subtitle{
-  margin:1.1em 0 .55em;
+  margin:.75em 0 .35em;
   font-weight:400;
   color:#a9c6ff;
   letter-spacing:.55em;
@@ -105,26 +105,47 @@ html,body{margin:0;height:100%;background:var(--space);overflow:hidden;color:#df
   font-size:clamp(.55rem, 1.15vmin, .78rem);
   padding-left:.35em;
 }
-
-/* central beam — subtle pulse (opacity+transform only, GPU-friendly) */
 .beam{
-  position:relative; height:2px; margin:.65em auto 0;
-  width:18%;
-  background:linear-gradient(90deg, transparent, rgba(140,180,255,.55), transparent);
+  position:relative;
+  height:2px;
+  margin:.4em auto 0;
+  width:24%;
+  background:linear-gradient(90deg, transparent 0%, rgba(140,180,255,.24) 20%, rgba(180,220,255,.72) 50%, rgba(140,180,255,.24) 80%, transparent 100%);
+  filter:drop-shadow(0 0 18px rgba(145,190,255,.22));
+}
+
+/* central beam — stronger glow and bright center flare */
+.beam{
+  position:relative;
+  height:2px;
+  margin:.65em auto 0;
+  width:24%;
+  background:linear-gradient(90deg, transparent 0%, rgba(140,180,255,.24) 20%, rgba(180,220,255,.72) 50%, rgba(140,180,255,.24) 80%, transparent 100%);
+  filter:drop-shadow(0 0 18px rgba(145,190,255,.22));
+}
+.beam::before{
+  content:'';
+  position:absolute;
+  left:50%; top:50%;
+  width:80%; height:1px;
+  transform:translate(-50%,-50%);
+  background:linear-gradient(90deg, transparent 0%, rgba(235,245,255,.95) 45%, rgba(255,255,255,1) 50%, rgba(235,245,255,.95) 55%, transparent 100%);
 }
 .beam-core{
-  position:absolute; left:50%; top:50%;
-  width:14%; height:6px;
-  margin-left:-7%; margin-top:-3px; /* static centering, no transform offset */
+  position:absolute;
+  left:50%; top:50%;
+  width:22%; height:6px;
+  margin-left:-11%; margin-top:-3px;
   border-radius:50%;
-  background:radial-gradient(closest-side, #d9e8ff, rgba(140,180,255,.6) 55%, transparent 75%);
+  background:radial-gradient(circle closest-side, #f5fbff 0%, rgba(255,255,255,.95) 30%, rgba(170,215,255,.7) 55%, rgba(140,180,255,.3) 80%, transparent 100%);
+  box-shadow:0 0 24px rgba(170,210,255,.45), inset 0 0 12px rgba(255,255,255,.45);
   will-change:transform,opacity;
   transform:translateZ(0);
   animation: beam-pulse 4.2s ease-in-out infinite both;
 }
 @keyframes beam-pulse{
-  0%,100%{ opacity:.75; transform:scale(1) translateZ(0) }
-  50%    { opacity:1;   transform:scale(1.18) translateZ(0) }
+  0%,100%{ opacity:.8; transform:scale(1) translateZ(0) }
+  50%    { opacity:1; transform:scale(1.16) translateZ(0) }
 }
 
 /* ---------- Star twinkle layer (opacity-only animation) ---------- */
@@ -161,9 +182,9 @@ html,body{margin:0;height:100%;background:var(--space);overflow:hidden;color:#df
 /* Mobile — tighten so text reads inside the 3:2 letterboxed band. */
 @media (max-width: 640px){
   .title{ font-size:clamp(1.4rem, 7.5vmin, 3rem); letter-spacing:.38em; padding-left:.38em }
-  .subtitle{ font-size:clamp(.55rem, 2.2vmin, .9rem); letter-spacing:.4em; padding-left:.4em; margin:.9em 0 .4em }
+  .subtitle{ font-size:clamp(.55rem, 2.2vmin, .9rem); letter-spacing:.4em; padding-left:.4em; margin:.7em 0 .3em }
   .tagline{ font-size:clamp(.45rem, 1.6vmin, .7rem); letter-spacing:.25em; padding-left:.25em }
-  .beam{ width:24% }
+  .beam{ width:24%; margin:.4em auto 0 }
 }
 
 /* Respect users who prefer no motion */
