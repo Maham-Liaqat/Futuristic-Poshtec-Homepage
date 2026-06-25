@@ -1,0 +1,179 @@
+/* POSHTEC — cinematic coming-soon page.
+   Layout is locked to a 1536x1024 (3:2) stage so every element keeps its
+   reference proportions; the stage scales with "contain" letterboxing into
+   any viewport. Animations are deliberately slow and small. */
+
+:root{
+  --space:#02040a;
+  --accent:#bcd7ff;
+  --accent-strong:#eaf3ff;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--space);overflow:hidden;color:#dfe9f7;font-family:'Orbitron',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+/* Full-viewport stage — fills entire viewport while preserving content proportions.
+   Uses dvh for mobile browser compatibility. */
+.viewport{position:fixed;inset:0;display:grid;place-items:stretch}
+.stage{
+  position:relative;
+  width:100vw;
+  height:100dvh;
+  background:url("assets/earth-bg.png") center/cover no-repeat,#02040a;
+  overflow:hidden;
+  contain: layout paint style;
+  transform: translateZ(0);
+}
+
+/* ---------- Satellites ---------- */
+.sat{position:absolute;display:block;pointer-events:none;
+  will-change:transform; transform:translateZ(0); backface-visibility:hidden;
+  image-rendering:auto}
+/* widths are % of stage so proportions hold across sizes */
+.sat--tl{ left:2.6%;  top:12.7%; width:20.3%; transform-origin:60% 50%;
+  animation: drift-tl 48s ease-in-out infinite both, spin-tl 28s linear infinite }
+.sat--bl{ left:3.3%;  top:54.2%; width:22.3%; transform-origin:50% 50%;
+  animation: drift-bl 54s ease-in-out infinite both, spin-bl 34s linear infinite }
+.sat--r { left:67%;   top:23.4%; width:34.6%; transform-origin:40% 50%;
+  animation: drift-r  42s ease-in-out infinite both, spin-r 32s linear infinite }
+
+/* Non-symmetric, non-bouncy paths via smooth orbital movements.
+   Now includes gentle rotation spins for realistic satellite movement. */
+@keyframes drift-r{
+  0%   { transform: translate3d(0,0,0)         }
+  25%  { transform: translate3d(-18px,12px,0)  }
+  50%  { transform: translate3d(10px,-15px,0)  }
+  75%  { transform: translate3d(-8px,-6px,0)   }
+  100% { transform: translate3d(0,0,0)         }
+}
+@keyframes drift-tl{
+  0%   { transform: translate3d(0,0,0)         }
+  25%  { transform: translate3d(10px,-11px,0)  }
+  50%  { transform: translate3d(-14px,6px,0)   }
+  75%  { transform: translate3d(5px,10px,0)    }
+  100% { transform: translate3d(0,0,0)         }
+}
+@keyframes drift-bl{
+  0%   { transform: translate3d(0,0,0)         }
+  25%  { transform: translate3d(-8px,-9px,0)   }
+  50%  { transform: translate3d(12px,7px,0)    }
+  75%  { transform: translate3d(3px,-11px,0)   }
+  100% { transform: translate3d(0,0,0)         }
+}
+
+/* Continuous slow rotations for realistic orbital spin */
+@keyframes spin-r{
+  0%   { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}
+@keyframes spin-tl{
+  0%   { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}
+@keyframes spin-bl{
+  0%   { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}
+
+/* ---------- Title block ---------- */
+.title-wrap{
+  position:absolute; left:50%; top:40%;
+  transform:translate(-50%,-50%);
+  text-align:center; width:100%;
+}
+.title{
+  margin:0;
+  font-weight:500;
+  letter-spacing:0.5em;
+  font-size:clamp(2rem, 6.2vmin, 5.5rem);
+  color:#f3f7ff;
+  text-shadow:0 0 18px rgba(170,200,255,.25);
+  padding-left:0.5em; /* compensate trailing letter-spacing for visual center */
+}
+.subtitle{
+  margin:1.1em 0 .55em;
+  font-weight:400;
+  color:#a9c6ff;
+  letter-spacing:.55em;
+  font-size:clamp(.7rem, 1.7vmin, 1.05rem);
+  padding-left:.55em;
+}
+.tagline{
+  margin:0;
+  color:#7a93bd;
+  letter-spacing:.35em;
+  font-size:clamp(.55rem, 1.15vmin, .78rem);
+  padding-left:.35em;
+}
+
+/* central beam — subtle pulse (opacity+transform only, GPU-friendly) */
+.beam{
+  position:relative; height:2px; margin:.65em auto 0;
+  width:18%;
+  background:linear-gradient(90deg, transparent, rgba(140,180,255,.55), transparent);
+}
+.beam-core{
+  position:absolute; left:50%; top:50%;
+  width:14%; height:6px;
+  margin-left:-7%; margin-top:-3px; /* static centering, no transform offset */
+  border-radius:50%;
+  background:radial-gradient(closest-side, #d9e8ff, rgba(140,180,255,.6) 55%, transparent 75%);
+  will-change:transform,opacity;
+  transform:translateZ(0);
+  animation: beam-pulse 4.2s ease-in-out infinite both;
+}
+@keyframes beam-pulse{
+  0%,100%{ opacity:.75; transform:scale(1) translateZ(0) }
+  50%    { opacity:1;   transform:scale(1.18) translateZ(0) }
+}
+
+/* ---------- Star twinkle layer (opacity-only animation) ---------- */
+.stars{
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 22% 42%, #cfe1ff 99%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 38% 9%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 55% 22%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 71% 8%, #d6e6ff 99%, transparent 100%),
+    radial-gradient(1.4px 1.4px at 82% 26%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 91% 14%, #cfe1ff 99%, transparent 100%),
+    radial-gradient(1px 1px at 47% 35%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 32% 6%, #ffffff 99%, transparent 100%),
+    radial-gradient(1px 1px at 64% 39%, #d6e6ff 99%, transparent 100%);
+  opacity:.55;
+  will-change:opacity;
+  transform:translateZ(0);
+  animation: twinkle 6s ease-in-out infinite both;
+}
+@keyframes twinkle{
+  0%,100%{ opacity:.42 }
+  50%    { opacity:.7 }
+}
+
+/* ---------- Responsive tuning ---------- */
+/* Tablet portrait — letterbox shrinks the stage; nudge title spacing for legibility. */
+@media (max-width: 1024px){
+  .title{ letter-spacing:.45em; padding-left:.45em }
+  .subtitle{ letter-spacing:.5em; padding-left:.5em }
+  .tagline{ letter-spacing:.3em; padding-left:.3em }
+}
+/* Mobile — tighten so text reads inside the 3:2 letterboxed band. */
+@media (max-width: 640px){
+  .title{ font-size:clamp(1.4rem, 7.5vmin, 3rem); letter-spacing:.38em; padding-left:.38em }
+  .subtitle{ font-size:clamp(.55rem, 2.2vmin, .9rem); letter-spacing:.4em; padding-left:.4em; margin:.9em 0 .4em }
+  .tagline{ font-size:clamp(.45rem, 1.6vmin, .7rem); letter-spacing:.25em; padding-left:.25em }
+  .beam{ width:24% }
+}
+
+/* Respect users who prefer no motion */
+@media (prefers-reduced-motion: reduce){
+  .sat,.beam-core,.stars{ animation:none !important; will-change:auto }
+}
+
+/* Coarse pointers / low-end: drop the star layer animation, keep look static.
+   Saves a fullscreen repaint cycle on weaker GPUs. */
+@media (hover:none) and (pointer:coarse){
+  .stars{ animation:none }
+}
+
