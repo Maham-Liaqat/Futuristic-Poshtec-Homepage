@@ -1,6 +1,5 @@
 /* POSHTEC — cinematic coming-soon page.
-   Layout is locked to a 1536x1024 (3:2) stage so every element keeps its
-   reference proportions; the stage scales with "contain" letterboxing into
+   every element keeps its reference proportions; the stage scales with "contain" letterboxing into
    any viewport. Animations are deliberately slow and small. */
 
 :root{
