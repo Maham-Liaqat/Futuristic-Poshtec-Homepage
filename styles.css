@@ -80,15 +80,15 @@ html,body{margin:0;height:100%;background:var(--space);overflow:hidden;color:#df
   transform:translate(-50%,-50%);
   text-align:center; width:100%;
 }
-.title{
+/* .title{
   margin:0;
   font-weight:500;
   letter-spacing:0.5em;
   font-size:clamp(2rem, 6.2vmin, 5.5rem);
   color:#f3f7ff;
   text-shadow:0 0 18px rgba(170,200,255,.25);
-  padding-left:0.5em; /* compensate trailing letter-spacing for visual center */
-}
+  padding-left:0.5em; 
+} */
 .subtitle{
   margin:.75em 0 .35em;
   font-weight:400;
